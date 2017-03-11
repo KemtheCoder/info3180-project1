@@ -32,18 +32,19 @@ def show_users():
 
     return render_template('show_users.html', users=users)
 
-@app.route('/add-user', methods=['POST', 'GET'])
-def add_user():
+@app.route('/profile', methods=['POST', 'GET'])
+def profile():
     user_form = UserForm()
 
     if request.method == 'POST':
         if user_form.validate_on_submit():
             # Get validated data from form
-            name = user_form.name.data # You could also have used request.form['name']
+            firstname = user_form.firstname.data # You could also have used request.form['name']
+            lastname = user_form.lastname.data
             email = user_form.email.data # You could also have used request.form['email']
 
             # save user to database
-            user = User(name, email)
+            user = User(firstname, lastname, email)
             db.session.add(user)
             db.session.commit()
 
@@ -51,7 +52,7 @@ def add_user():
             return redirect(url_for('show_users'))
 
     flash_errors(user_form)
-    return render_template('add_user.html', form=user_form)
+    return render_template('profile.html', form=user_form)
 
 # Flash errors from the form if validation fails
 def flash_errors(form):

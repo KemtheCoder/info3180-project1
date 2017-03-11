@@ -3,5 +3,6 @@ from wtforms import StringField
 from wtforms.validators import InputRequired
 
 class UserForm(FlaskForm):
-    name = StringField('Name', validators=[InputRequired()])
+    firstname = StringField('Firstname', validators=[InputRequired()])
+    lastname = StringField('Lastname', validators=[InputRequired()])
     email = StringField('Email', validators=[InputRequired()])
