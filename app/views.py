@@ -5,7 +5,17 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from app import app, db
+
+
+
+from models import Person, PersonGroup
+from flask_appbuilder.views import ModelView, BaseView
+from flask_appbuilder.charts.views import GroupByChartView
+from flask_appbuilder.models.group import aggregate_count
+from flask_appbuilder.models.sqla.interface import SQLAInterface
+from flask_appbuilder.widgets import ListThumbnail
+
+from app import app, db, appbuilder
 from flask import render_template, request, redirect, url_for, flash
 from forms import UserForm
 from models import User
@@ -41,10 +51,14 @@ def profile():
             # Get validated data from form
             firstname = user_form.firstname.data # You could also have used request.form['name']
             lastname = user_form.lastname.data
+            age = user_form.age.data
+            gender = user_form.gender.data
+            biography = user_form.biography.data
+            image = filename(user_form.image.file.filename)
             email = user_form.email.data # You could also have used request.form['email']
 
             # save user to database
-            user = User(firstname, lastname, email)
+            user = User(firstname, lastname, age, gender, biography, image, email)
             db.session.add(user)
             db.session.commit()
 
