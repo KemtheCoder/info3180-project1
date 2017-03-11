@@ -36,7 +36,7 @@ def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
 
-@app.route('/users')
+@app.route('/profiles')
 def show_users():
     users = db.session.query(User).all() # or you could have used User.query.all()
 
@@ -63,7 +63,7 @@ def profile():
             db.session.commit()
 
             flash('User successfully added')
-            return redirect(url_for('show_users'))
+            return redirect(url_for('profiles'))
 
     flash_errors(user_form)
     return render_template('profile.html', form=user_form)
