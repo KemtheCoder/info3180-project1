@@ -7,7 +7,7 @@ This file creates your application.
 
 
 
-
+import os
 from models import Person, PersonGroup
 from flask_appbuilder.views import ModelView, BaseView
 from flask_appbuilder.charts.views import GroupByChartView
@@ -40,7 +40,7 @@ def about():
 def show_users():
     users = db.session.query(User).all() # or you could have used User.query.all()
 
-    return render_template('show_users.html', users=users)
+    return render_template('profiles', users=users)
 
 @app.route('/profile', methods=['POST', 'GET'])
 def profile():
@@ -55,10 +55,10 @@ def profile():
             gender = user_form.gender.data
             biography = user_form.biography.data
             image = filename(user_form.image.file.filename)
-            email = user_form.email.data # You could also have used request.form['email']
+            
 
             # save user to database
-            user = User(firstname, lastname, age, gender, biography, image, email)
+            user = User(firstname, lastname, age, gender, biography, image)
             db.session.add(user)
             db.session.commit()
 
@@ -67,6 +67,24 @@ def profile():
 
     flash_errors(user_form)
     return render_template('profile.html', form=user_form)
+    
+    
+@app.route('/uploads')
+def image_listing():
+    i = list_image()
+    return render_template('home.hml', b=i )
+
+def list_image():
+    if request.method == 'GET':
+        rootdir = os.getcwd()
+        print rootdir
+        uimages = []
+        for subdir, dirs, files in os.walk(rootdir + 'app/static/uploads'):
+            for file in files:
+                uimages.append(file)
+                print os.path.join(subdir,file)
+        return uimages
+            
 
 # Flash errors from the form if validation fails
 def flash_errors(form):
@@ -76,6 +94,10 @@ def flash_errors(form):
                 getattr(form, field).label.text,
                 error
             ))
+
+def timeinfo():
+    date = time.strftime("%a, %d %b %Y")
+
 
 ###
 # The functions below should be applicable to all Flask apps.
