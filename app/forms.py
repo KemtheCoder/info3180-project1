@@ -10,4 +10,4 @@ class UserForm(FlaskForm):
     biography = TextField('biography', validators=[InputRequired()])
     image = FileField('Image', validators=[file_required()])
     lastname = StringField('Lastname', validators=[InputRequired()])
-    
+
