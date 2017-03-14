@@ -38,12 +38,14 @@ def about():
 
 @app.route('/profiles')
 def show_users():
+    """should render a list of all profiles"""
     users = db.session.query(User).all() # or you could have used User.query.all()
 
     return render_template('profiles', users=users)
 
 @app.route('/profile', methods=['POST', 'GET'])
 def profile():
+    """should render a profile"""
     user_form = UserForm()
 
     if request.method == 'POST':
@@ -72,7 +74,7 @@ def profile():
 @app.route('/uploads')
 def image_listing():
     i = list_image()
-    return render_template('home.hml', b=i )
+    return render_template('home.html', b=i )
 
 def list_image():
     if request.method == 'GET':
